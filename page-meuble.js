@@ -28,7 +28,7 @@ request.onreadystatechange = function(){
         let totalArticles = 0
         let btnValid = document.querySelector("#btn-panier-valid")
 
-
+        
 
 //creation de la liste  des differents vernis
         for (let eltVernis of meuble.varnish){
@@ -47,7 +47,10 @@ request.onreadystatechange = function(){
         description.textContent = meuble.description
 
         prix.textContent = meuble.price + " €"
-        nbrArticles.innerHTML = 0    
+        nbrArticles.innerHTML = 0   
+        
+        
+
          
 //fonction sur le bouton pour ajouter au panier
         btnAjout.addEventListener("click", function(){
@@ -67,17 +70,18 @@ request.onreadystatechange = function(){
             }
         })  
 
-    btnValid.addEventListener("click", function(e){
-        let ArrayMeuble = [];
-        ArrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles) +" €")
-        console.log(ArrayMeuble)
-        localStorage.setItem("panier", ArrayMeuble)
-        
-    })
+        btnValid.addEventListener("click", function(e){
+            
+            let ArrayMeuble = [];
+            ArrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles) +" €")
+            console.log(ArrayMeuble)
+            localStorage.setItem("panier", ArrayMeuble)  
+        })
+    }
 
 
 
-    }        
+            
 }
 request.open ("GET", "http://localhost:3000/api/furniture/" + id)
 request.send()

@@ -22,26 +22,31 @@
         </div>
     <p id="prix-total"></p>
 
-    <form action="" method="" id="form">
-        <div id="prenom-nom">
-            <label for="firstName">Prénom: </label>
-            <input type="text" name="firstName" id="firstname" >
+    <form action="" method="" id="form" name="form">
+        
+        <label for="firstName">Prénom </label>
+        <input type="text" name="firstName" id="firstname" >
+        <span id="firstname_m"></span><br>
 
-            <label for="lastName">Nom: </label>
-            <input type="text" name="lastName" id="lastname" >
-        </div>
+        <label for="lastName">Nom </label>
+        <input type="text" name="lastName" id="lastname" >
+        <span id="lastname_m"></span><br>
+        
 
-        <label for="adress">Adresse: </label>
+        <label for="adress">Adresse </label>
         <input type="adress" name="adress" id="adress" >
+        <span id="adress_m"></span><br>
 
-        <label for="city">Ville: </label>
+        <label for="city">Ville </label>
         <input type="text" name="city" id="city" >
+        <span id="city_m"></span><br>
 
-        <label for="email">Email: </label>
+        <label for="email">Email </label>
         <input type="email" name="email" id="email" >
+        <span id="email_m"></span><br>
 
-        <button>Valider le formulaire</button>
-    </form>
+        <button id="bouton-valid" value ="validation">
+        Validez le formulaire</button>
 
     <script src="panier.js"></script>
     <script src="page-meuble.js"></script>

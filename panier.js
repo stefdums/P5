@@ -1,6 +1,6 @@
 
 let ul = document.querySelector("ul")
-let form = document.querySelector("form")
+//let form = document.querySelector("form")
 let prenom = document.querySelector("#firstname")
 let nom = document.querySelector("#lastname")
 let adress = document.querySelector("#adress")
@@ -32,17 +32,18 @@ class LignePanier{
         this.vernis = vernis;
         this.nbrArticles = nbrArticles;
         this.totalArticles = totalArticles;
-        
+     
     }
   
-}
+ }
 let monPanier = new LignePanier(arrayPanier[0],arrayPanier[1],arrayPanier[2],arrayPanier[3])
-
+/*
 console.log(monPanier)
 console.log(monPanier.length)
 console.log(localStorage.length)
 console.log(localStorage)
 console.log(arrayPanier)
+*/
 
 // boucle pour chaque localStorage création d'un ligne tableau et une colonne pour chaque 
 for (let i = 0; i < localStorage.length; i++){
@@ -74,23 +75,59 @@ for (let i = 0; i < localStorage.length; i++){
 
 //validation input du formulaire
 
-form.addEventListener("submit", function(e){
 
-    console.log(form)
-    for (let i = 0; i < form.length; i++){
 
-        if(form[i].value !== ""){
-            window.confirm("Voulez vous confirmer?")
-            //form[i].required = true
-            console.log("validé")
+// regex commence par a-z ou en maj, puis que des lettres et avec accents, plus que 2 lettres puis ajout hypothetique du prenom composé
+//let regexText = /^[a-zA-Zéèîï][a-zéèêçîï]+([-'\s][a-zA-Zéèîï][a-zéèêçîï]+)?/; 
 
+
+let regexText = /\D/;
+
+let formContact = document.forms["form"]
+let champsText = formContact.querySelectorAll("[type=text]")
+console.log(formContact)
+console.log(champsText)
+let inputManquant
+formContact.addEventListener("submit", function(e){
+ 
+    let inputs = this;
+     
+//traitement champs text
+
+    for (let i=0; i< champsText.length; i++){
+        console.log(champsText[i])
+        inputManquant = document.getElementById(champsText[i].id + "_m")
+        console.log(regexText.test(champsText[i].value))
+        if(regexText.test(champsText[i].value)){
+            inputManquant.innerHTML = "&#10004"
+            inputManquant.style.color = "green"
         }else{
-            e.preventDefault()
-            alert(form[i].id + " n'est pas remplis" )
-            
+            inputManquant.innerHTML = champsText[i].previousElementSibling.innerHTML + " n'est pas conforme"
+            inputManquant.style.color = "orange"
         }
     }
+        
     
+
+ //traitement pour champs vides   
+    for (let i=0; i< inputs.length; i++){
+        inputManquant = document.getElementById(inputs[i].id + "_m")
+  
+        if(!inputs[i].value){
+            e.preventDefault()
+            inputManquant.innerHTML = inputs[i].previousElementSibling.innerHTML + " est manquant"
+            inputManquant.style.color = "red"
+        }
+        else{
+            inputManquant.innerHTML = "&#10004"
+            inputManquant.style.color = "green"
+        }
+    }
+
 })
 
+
+/*
+
+*/
 
