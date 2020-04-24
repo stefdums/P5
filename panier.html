@@ -22,23 +22,23 @@
         </div>
     <p id="prix-total"></p>
 
-    <form action="" method="" id="form" name="form">
+    <form action="" method="post" id="form" name="form">
         
         <label for="firstName">Prénom </label>
-        <input type="text" name="firstName" id="firstname" >
+        <input type="text" name="firstName" id="firstname" class="only-letters">
         <span id="firstname_m"></span><br>
 
         <label for="lastName">Nom </label>
-        <input type="text" name="lastName" id="lastname" >
+        <input type="text" name="lastName" id="lastname" class="only-letters">
         <span id="lastname_m"></span><br>
         
 
         <label for="adress">Adresse </label>
-        <input type="adress" name="adress" id="adress" >
+        <input type="text" name="adress" id="adress" >
         <span id="adress_m"></span><br>
 
         <label for="city">Ville </label>
-        <input type="text" name="city" id="city" >
+        <input type="text" name="city" id="city" class="only-letters">
         <span id="city_m"></span><br>
 
         <label for="email">Email </label>
@@ -47,8 +47,8 @@
 
         <button id="bouton-valid" value ="validation">
         Validez le formulaire</button>
-
+    </form>
     <script src="panier.js"></script>
-    <script src="page-meuble.js"></script>
+    <!-- <script src="page-meuble.js"></script> -->
 </body>
 </html>

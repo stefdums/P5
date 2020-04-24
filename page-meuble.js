@@ -72,10 +72,12 @@ request.onreadystatechange = function(){
 
         btnValid.addEventListener("click", function(e){
             
-            let ArrayMeuble = [];
-            ArrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles) +" €")
-            console.log(ArrayMeuble)
-            localStorage.setItem("panier", ArrayMeuble)  
+            let arrayMeuble = [];
+            arrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles) +" €", "products_"+ meuble._id)
+            console.log(arrayMeuble)
+            localStorage.setItem("panier", arrayMeuble)
+            
+            
         })
     }
 
