@@ -2,39 +2,72 @@
 let ul = document.querySelector("ul")
 let divPanier = document.querySelector("#liste-panier");
 let table = document.querySelector("table")
+let tFoot = document.querySelector("#prix-total")
+let arrayPanier = [];
+let prixTotal = 0
+let product;
 
 //recuperation des données d'ajout au panier
-let arrayMeuble = localStorage.getItem("panier")
-console.log(arrayMeuble)
-let products = arrayMeuble.split(",");// [name, vernis, qté, prixTT, id]
+//création d'un tableau "arrayPanier" avec ajout de tableau "product" avec données pour chaque meuble
 
-console.log(products)
-
-
-// class LignePanier{
-//     constructor(name, vernis, nbrArticles , totalArticles){
-//         this.name = name;
-//         this.vernis = vernis;
-//         this.nbrArticles = nbrArticles;
-//         this.totalArticles = totalArticles; 
-//     }  
-// }
-//let monPanier = new LignePanier(products[0],products[1],products[2],products[3])
-
-// boucle pour chaque localStorage création d'un ligne tableau et une colonne pour chaque 
-//for (let i = 0; i < localStorage.length; i++){
+for (let i=0; i<localStorage.length; i++){
+    let stringProduct = localStorage.getItem(localStorage.key([i]))
+    //console.log(stringProduct)
+    let product = stringProduct.split(",");// [name, vernis, qté, prixTT, id]
+    //console.log(product)
+    arrayPanier.push(product)
+}
+//console.log(arrayPanier)
+//console.log(parseInt(arrayPanier[0][3],10))
+if(prixTotal = 0){
+    tFoot.innerHTML = "Votre panier est vide"
+}
+for (let i = 0; i < arrayPanier.length; i++){
     let tr = document.createElement("tr")
+    let btnSupp = document.createElement("button")
+    btnSupp.innerHTML = "Supprimer"
 
-    for (let j = 0; j < products.length -1; j++){
+    prixTotal += parseInt(arrayPanier[i][3],10)
+    tFoot.innerHTML = prixTotal + " €"    
+    //console.log(tFoot.innerHTML)
+    
+    
+// ajout du bouton pour supp la ligne   
+    btnSupp.addEventListener("click", function(e){
+        prixTotal -= parseInt(arrayPanier[i][3],10)
+        if(prixTotal <= 0){
+            tFoot.innerHTML = "Votre panier est vide"
+        }else{
+            tFoot.innerHTML = prixTotal + " €"
+        }
+        //console.log(prixTotal)
+        localStorage.removeItem(localStorage.key([i]))
+        tr.remove();
+        event.stopPropagation()
         
+    })
+
+//boucle pour ajouter des cases aux lignes avec [name, vernis, qté, prixTT, id]
+    for(let j=0; j<arrayPanier[i].length -1; j++){ // -1 pour enlever l'affichage de l id
         let th = document.createElement("th")
-        th.id = products[j]
-        th.innerHTML = products[j]
-        table.appendChild(th)
+        th.innerHTML = arrayPanier[i][j]
         table.appendChild(tr)
+        tr.appendChild(th)
         
     }
-//}
+    tr.appendChild(btnSupp)
+}
+
+//test bouton pour recup le tableau de commande
+let btnTest = document.querySelector("#btn-test")
+btnTest.addEventListener("click", function(e){
+    console.log(arrayPanier)
+})
+
+
+
+
+
 
 //validation inputs du formulaire
 
@@ -43,28 +76,32 @@ console.log(products)
 // regex commence par a-z ou en maj, puis que des lettres et avec accents, plus que 2 lettres puis ajout hypothetique du prenom composé
 let regexText = /^[a-zA-Zéèîï][a-zéèêçîï]+([-'\s][a-zA-Zéèîï][a-zéèêçîï]+)?/; 
 let regexMail = /.+@.+\..+/
-
+let contact
 let form = document.getElementById("form")
 let inputs = document.forms["form"]
 let champsText = inputs.querySelectorAll("[type=text]")
 let champMail = inputs.querySelector("[type=email]")
 let champAdress = inputs.querySelector("#adress")
 
+
 let styleInputValid =(champ)=>{ // fonction pour valider le champ
     champ.nextElementSibling.innerHTML = "&#10004"
     champ.nextElementSibling.style.color = "green"
+    champ.dataset.valid = "true"
     return true;
 }
-let erreurVide = (a)=>{ // fonction pour erreur champ vide
+let erreurVide = (champ)=>{ // fonction pour erreur champ vide
     
-    a.nextElementSibling.innerHTML = a.previousElementSibling.innerHTML + " est vide"
-    a.nextElementSibling.style.color = "red"
+    champ.nextElementSibling.innerHTML = champ.previousElementSibling.innerHTML + " est vide"
+    champ.nextElementSibling.style.color = "red"
+    champ.dataset.valid = "false"
     return false
 }
-let erreurConformite = (b)=>{ // fonction pour erreur champ non conforme
+let erreurConformite = (champ)=>{ // fonction pour erreur champ non conforme
     
-    b.nextElementSibling.innerHTML = b.previousElementSibling.innerHTML + " n'est pas conforme"
-    b.nextElementSibling.style.color = "orange"
+    champ.nextElementSibling.innerHTML = champ.previousElementSibling.innerHTML + " n'est pas conforme"
+    champ.nextElementSibling.style.color = "orange"
+    champ.dataset.valid = "false"
     return false
 }
 
@@ -116,57 +153,53 @@ champAdress.addEventListener("blur", function(e){
     }    
 })
 
-let contact = new FormData(inputs)
-console.log(contact)
 
-inputs.addEventListener("submit", function(e){
 
-    console.log(inputs)
-    
-    if(!inputs.value)  {          
-   //envoie des infos
-        let contact = new FormData(inputs)
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function(){
-            if(this.readyState == XMLHttpRequest.DONE && this.status == 200
-                ){
-                console.log(JSON.parse(this.response))
-                console.log(this.value)
+//console.log(contact)
 
-            }        
-            else{
-                e.preventDefault()
-                console.log("pas de connection")
-                //console.log(contact)
-            }
-        }    
-        xhr.open("GET", "http://localhost:3000/api/furniture/order")
-        //xhr.responseType = "json"
-        //xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send()// faut reussir à envoyer (products_products[5]) et contact
+form.addEventListener("submit", function(e){
+    let valide = true
+    for(let input of inputs){
+        console.log(input.dataset.valid)
+        if(input.dataset.valid == "false"){
+            e.preventDefault()
+            valide = false
+            break
+            
+        }else {
+            console.log("test")
+        }
+    }
+    if (valide == true){
+        contact = new FormData(form)
+        console.log(valide)
+        confirm(arrayPanier, contact) 
     }else{
-        console.log("probleme")
-    }    
+            alert("marche pas")
+        } 
 })
 
-
-
-let verif = ()=>{
-    for (let i=0; i< onlyLetters.length; i++){
-        if(!onlyLetters[i].value && !regexText.test(onlyLetters[i].value)){
-            e.preventDefault()
-            return false
-
-        }else{
-            return true
                 
-        }   
-    }
-    if(!champMail.value && !regexMail.test(champMail.value) && !champAdress.value){
-        e.preventDefault()
-        return false
-    }else{
-    return true    
-    }
-}
+    //envoie des infos
+            // let contact = new FormData(form)
+            // console.log(contact.get("lastName"))
+            // let xhr = new XMLHttpRequest();
+            // xhr.onreadystatechange = function(){
+            //     if(this.readyState == XMLHttpRequest.DONE && this.status == 200
+            //         ){
+            //         console.log(JSON.parse(this.response))
+            //         console.log(this.value)
+            //         confirm("ca marche")
+
+            //     }        
+            //     else{
+            //         e.preventDefault()
+            //         alert("pas de connection")
+            //         //console.log(contact)
+            //     }
+            // }    
+            // xhr.open("POST", "http://localhost:3000/api/furniture/order")
+            // xhr.responseType = "json"
+            // xhr.setRequestHeader("Content-Type", "application/json");
+            // xhr.send()// faut reussir à envoyer (product_product[5]) et contact
 

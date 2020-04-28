@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,39 +13,41 @@
                     <th>Nom</th>
                     <th>Vernis</th>
                     <th>Quantité</th>
-                    <th>Prix total</th>
+                    <th>Prix articles</th>
                 </tr>
                 
-
+                <tfoot>
+                    <tr id="prix-total"></tr>
+                </tfoot>
             </table>
-
+            <button id="btn-test">btn</button>
         </div>
     <p id="prix-total"></p>
 
     <form action="" method="post" id="form" name="form">
         
         <label for="firstName">Prénom </label>
-        <input type="text" name="firstName" id="firstname" class="only-letters">
+        <input type="text" name="firstName" id="firstname" class="only-letters" data-valid = "false">
         <span id="firstname_m"></span><br>
 
         <label for="lastName">Nom </label>
-        <input type="text" name="lastName" id="lastname" class="only-letters">
+        <input type="text" name="lastName" id="lastname" class="only-letters" data-valid = "false">
         <span id="lastname_m"></span><br>
         
 
         <label for="adress">Adresse </label>
-        <input type="text" name="adress" id="adress" >
+        <input type="text" name="adress" id="adress" data-valid = "false">
         <span id="adress_m"></span><br>
 
         <label for="city">Ville </label>
-        <input type="text" name="city" id="city" class="only-letters">
+        <input type="text" name="city" id="city" class="only-letters" data-valid = "false">
         <span id="city_m"></span><br>
 
         <label for="email">Email </label>
-        <input type="email" name="email" id="email" >
+        <input type="email" name="email" id="email" data-valid = "false">
         <span id="email_m"></span><br>
 
-        <button id="bouton-valid" value ="validation">
+        <button id="bouton-valid" value ="validation" data-valid = "true">
         Validez le formulaire</button>
     </form>
     <script src="panier.js"></script>

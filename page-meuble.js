@@ -9,7 +9,8 @@ let request = new XMLHttpRequest()
 
 // recuperation de la page meuble.html 
 let pageMeuble = document.querySelector("#page-meuble")
-
+let arrayMeuble = [];
+let arrayListe = [];
 
 request.onreadystatechange = function(){
     if (this.readyState == XMLHttpRequest.DONE && this.status == 200){
@@ -28,7 +29,19 @@ request.onreadystatechange = function(){
         let totalArticles = 0
         let btnValid = document.querySelector("#btn-panier-valid")
 
-        
+//creation class pour achat d'un meuble
+// class Meuble {
+//     constructor(nom, vernis, quantite, prixTT, id){
+//         this.nom = nom,
+//         this.vernis = vernis,
+//         this.quantite = quantite,
+//         this.prixTT = prixTT//.price*parseInt(totalArticles),
+//         this.id = id
+//     }
+//     ligneMeuble(){
+//         arrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles), meuble.id)
+//     }
+// }        
 
 //creation de la liste  des differents vernis
         for (let eltVernis of meuble.varnish){
@@ -69,16 +82,24 @@ request.onreadystatechange = function(){
                 btnSupp.disabled = true
             }
         })  
-
+        
         btnValid.addEventListener("click", function(e){
             
-            let arrayMeuble = [];
             arrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles) +" €", "products_"+ meuble._id)
             console.log(arrayMeuble)
-            localStorage.setItem("panier", arrayMeuble)
+                
+            localStorage.setItem("ligne-panier_"+meuble._id+select.value, arrayMeuble)
+                
+
+        
+           
+       
             
+
             
         })
+        //recuperation de tout les ligneMeuble dans le arrayListe 
+        //localStorage.setItem("panier", arrayListe)
     }
 
 
