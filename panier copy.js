@@ -159,7 +159,9 @@ champAddress.addEventListener("blur", function(e){
 //contact = new FormData(form)
 
 
-
+/*
+* variable object pour convertir FormData en objet JS
+*/
 
 //let object = {};
 /*
@@ -182,12 +184,11 @@ contact.forEach(function(value, key){
 /**
  * variable avec la reponse du serveur
  */
-//let responseSubmit
+let responseSubmit
 /**
  * fonction asynchrone pour envoyer avec POST json avec contact et products
- * 
+ * @param {*}
  */
-/*
 const postForm = async function(){
     try{
         let response = await fetch("http://localhost:3000/api/furniture/order", {
@@ -211,40 +212,14 @@ const postForm = async function(){
         console.log("probleme avec postForm  "+e)
     }   
 }
-*/
-// let json = async()=>{
-//     let contact = new FormData(form)
-//     let object = {}
-//     contact.forEach(function(value, key){
-//         object[key] = value;
-//     }); 
-//     return JSON.stringify({"contact":object, "products": products_id});
-// }
-let responseSubmit;
-let json
-const postForm = async function(){
-    try{
-        let response = await fetch("http://localhost:3000/api/furniture/order", {
-            method:'POST',
-            headers:{
-                "X-Requested-With":"XMLHttpRequest",
-                'Content-type': 'application/json'
-            },
-            body: json
-        })
-        responseSubmit = await response.json()
-        if(response.ok === false){//si le status n'est pas entre 200 et 299
-            console.error(responseSubmit + response.status)
-        }else {
-            console.log(json)
-            console.log( "envoi correct")
-            console.log(responseSubmit)
-
-        } 
-    }catch(e){
-        console.log("probleme avec postForm  "+e)
-    }
-};
+let json = async()=>{
+    let contact = new FormData(form)
+    let object = {}
+    contact.forEach(function(value, key){
+        object[key] = value;
+    }); 
+    return JSON.stringify({"contact":object, "products": products_id});
+}
 
 form.addEventListener("submit", async function(e){
     let valide = true
@@ -258,37 +233,26 @@ form.addEventListener("submit", async function(e){
     }
     if (valide == true){
         e.preventDefault() 
-/**
- * création d'un nouvel objet FormData qui recupere les names du formulaire et leurs valeurs
- */        
-        contact = new FormData(form)
-/**
- * variable pour convertir FormData en objet JS
- */        
-        let object = {};
-        contact.forEach(function(value, key){
-        object[key] = value; 
-        });
-/**
-* variable a envoyer en POST avec object{} qui contient le FormData et products[] qui contient les id du panier 
-*/        
-        json = JSON.stringify({"contact":object, "products": products_id});
-        await postForm()
+        //recup FormDat -> contact
+        //creer un objet avec FormData
+        //créer json avec product et contact
         
-        console.log(json)
+        await postForm()
+        await json()
+        console.log(json())
         console.log(responseSubmit)
-        //console.log(responseSubmit.contact)
+        console.log(responseSubmit.contact)
         
 /**
 *  Recuparation en localStorage du firstName, lastName, prixTotal et orderId
 * */    
-     
-        localStorage.setItem("commande-contactPrenom", responseSubmit.contact.firstName)
-        localStorage.setItem("commande-contactNom", responseSubmit.contact.lastName)
-        localStorage.setItem("commande-prix",prixTotal)
-        localStorage.setItem("commande-id",responseSubmit.orderId)
-        
-        window.open("merci.html", '_self')
+     /*
+        await localStorage.setItem("commande-contactPrenom", responseSubmit.contact.firstName)
+        await localStorage.setItem("commande-contactNom", responseSubmit.contact.lastName)
+        await localStorage.setItem("commande-prix",prixTotal)
+        await localStorage.setItem("commande-id",responseSubmit.orderId)
+        */
+        //window.open("merci.html", '_self')
         
     
         
