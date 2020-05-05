@@ -18,7 +18,7 @@ let achat = document.querySelector("#achat")
 let prix = document.querySelector("#prix")
 let btnAjout = document.querySelector("#btn-panier-ajout")
 let btnSupp = document.querySelector("#btn-panier-supp")
-btnSupp.setAttribute("disabled", false)
+//btnSupp.setAttribute("disabled", false)
 let nbrArticles = document.querySelector("#nbr-articles")
 let totalArticles = 0
 let btnValid = document.querySelector("#btn-panier-valid")
@@ -28,9 +28,15 @@ let titlePage = document.querySelector("title")
 let spanError = document.createElement("span")
 spanError.innerHTML = " "
 document.querySelector("#modif-achat").appendChild(spanError)
-
-
-
+/*
+if (totalArticles > 0){
+    btnAjout.setAttribute("disabled", false)
+    btnSupp.setAttribute("disabled", true)
+}else{
+    btnAjout.setAttribute("disabled", true)
+    btnSupp.setAttribute("disabled", false)
+}
+*/
 const getFurniture = async function(){
     try{
         let response = await fetch( "http://localhost:3000/api/furniture/" + id)//renvoi une promesse
@@ -65,17 +71,30 @@ const getFurniture = async function(){
                 
     //verifie si l'article n'a pas deja été ajouté           
                 if(["ligne-panier_"+meuble._id+"-"+select.value] in localStorage){
-                    btnAjout.setAttribute("disabled", false)
-                    btnValid.setAttribute("disabled", false)
-                    
+                    btnSupp.disabled = true 
+                    btnAjout.disabled = true
+                    btnValid.disabled = true
                     spanError.innerHTML = "article déja ajouté au panier"
                 }
                 else{
 
-                    totalArticles = 1; //car pour le MVP pas plus d'une ref pour l'ajout au panier
+                    totalArticles++; 
                     nbrArticles.innerHTML = totalArticles 
-                    btnSupp.setAttribute("disabled", false)
+                    
                     spanError.innerHTML = " "
+                    
+
+/**
+ * Partie du code à supprimer quand on pourra ajouter une quantité superieur à 1
+ */
+                    if(totalArticles=1){
+                        btnAjout.disabled = true
+                        btnSupp.disabled = false 
+                    }
+/**
+ * 
+ */                    
+
                 }
             })
     //fonction sur le bouton pour supp du panier avec disabled pour chiffre < 0
@@ -84,28 +103,31 @@ const getFurniture = async function(){
                 if (totalArticles > 0) {
                     totalArticles--;
                     nbrArticles.innerHTML = totalArticles
+                    btnAjout.disabled = false
+                    btnSupp.disabled = true 
 
                     
                 }else {
-                    btnSupp.setAttribute("disabled", true)
+                   btnSupp.disabled = false
                 }
             })  
             
             btnValid.addEventListener("click", function(e){
-                if (totalArticles>=1){
+                if (totalArticles!=0){
                 arrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles) +" €", meuble._id)
-                console.log(arrayMeuble)  
+                //console.log(arrayMeuble)  
 
                     if(["ligne-panier_"+meuble._id+"-"+select.value] in localStorage){
+                        e.preventDefault()
                         spanError.innerHTML = "article déja ajouté au panier"
                     }else{
                         localStorage.setItem("ligne-panier_"+meuble._id+"-"+select.value, arrayMeuble)
                         spanError.innerHTML = "Article ajouté au panier "
-                        btnValid.setAttribute("disabled", true)
+                        btnValid.disabled = true
                     }
                 }    
                 else {
-                    //e.preventDefault()
+                    e.preventDefault()
                     spanError.innerHTML = "Aucune quantité commandé"
                     console.log("aucune quantité commandé")
                 }   

@@ -86,28 +86,36 @@ let champsText = inputs.querySelectorAll("[type=text]")
 let champMail = inputs.querySelector("[type=email]")
 let champAddress = inputs.querySelector("#address")
 
-
-let styleInputValid =(champ)=>{ // fonction pour valider le champ
+/**
+ * fonction pour valider le champ
+ * @param {sting} champ 
+ */
+let styleInputValid =(champ)=>{ 
     champ.nextElementSibling.innerHTML = "&#10004"
     champ.nextElementSibling.style.color = "green"
     champ.dataset.valid = "true"
-    return true;
-}
-let erreurVide = (champ)=>{ // fonction pour erreur champ vide
     
+}
+/**
+ * fonction pour erreur champ vide
+ * @param {string} champ 
+ */
+let erreurVide = (champ)=>{ 
     champ.nextElementSibling.innerHTML = champ.previousElementSibling.innerHTML + " est vide"
     champ.nextElementSibling.style.color = "red"
     champ.dataset.valid = "false"
-    return false
-}
-let erreurConformite = (champ)=>{ // fonction pour erreur champ non conforme
     
+}
+/**
+ * fonction pour erreur champ non conforme
+ * @param {string} champ 
+ */
+let erreurConformite = (champ)=>{ 
     champ.nextElementSibling.innerHTML = champ.previousElementSibling.innerHTML + " n'est pas conforme"
     champ.nextElementSibling.style.color = "orange"
     champ.dataset.valid = "false"
-    return false
+    
 }
-
 
 //traitement pour validation inputs avec du text
 let onlyLetters = document.querySelectorAll(".only-letters")
@@ -222,6 +230,9 @@ const postForm = async function(){
 // }
 let responseSubmit;
 let json
+/**
+ * fonction asynchrone pour envoyer avec POST json avec contact et products
+ */
 const postForm = async function(){
     try{
         let response = await fetch("http://localhost:3000/api/furniture/order", {
@@ -246,6 +257,9 @@ const postForm = async function(){
     }
 };
 
+/**
+ * Submit si TOUT les champs du formulaire sont validés
+ */
 form.addEventListener("submit", async function(e){
     let valide = true
     for(let input of inputs){
