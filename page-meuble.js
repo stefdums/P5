@@ -58,10 +58,19 @@ request.onreadystatechange = function(){
          
 //fonction sur le bouton pour ajouter au panier
         btnAjout.addEventListener("click", function(){
-            totalArticles = 1; //car pour le MVP pas plus d'une ref pour l'ajout au panier
-            nbrArticles.innerHTML = totalArticles 
-            btnSupp.disabled = false
-            spanError.innerHTML = " "
+
+//verifie si             
+            if(["ligne-panier_"+meuble._id+"-"+select.value] in localStorage){
+                btnValid.setAttribute("disabled", true)
+                spanError.innerHTML = "article déja ajouté au panier"
+            }
+            else{
+
+                totalArticles = 1; //car pour le MVP pas plus d'une ref pour l'ajout au panier
+                nbrArticles.innerHTML = totalArticles 
+                btnSupp.disabled = false
+                spanError.innerHTML = " "
+            }
         })
 //fonction sur le bouton pour supp du panier avec disabled pour chiffre < 0
         btnSupp.addEventListener("click", function(){
@@ -79,11 +88,19 @@ request.onreadystatechange = function(){
             if (totalArticles>=1){
             arrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles) +" €", meuble._id)
             console.log(arrayMeuble)  
-            localStorage.setItem("ligne-panier_"+meuble._id+select.value, arrayMeuble)
-            spanError.innerHTML = " "
 
-            }else {
-                e.preventDefault()
+                if(["ligne-panier_"+meuble._id+"-"+select.value] in localStorage){
+                    //e.preventDefault()
+                    //alert("coucou")
+                    spanError.innerHTML = "article déja ajouté au panier"
+                }else{
+                    localStorage.setItem("ligne-panier_"+meuble._id+"-"+select.value, arrayMeuble)
+                    spanError.innerHTML = "Article ajouté au panier "
+                    btnValid.setAttribute("disabled", true)
+                }
+            }    
+            else {
+                //e.preventDefault()
                 spanError.innerHTML = "Aucune quantité commandé"
                 console.log("aucune quantité commandé")
             }   
@@ -95,3 +112,21 @@ request.open ("GET", "http://localhost:3000/api/furniture/" + id)
 request.send()
 
 
+// btnValid.addEventListener("click", function(e){
+//     if (totalArticles>=1){
+//     arrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles) +" €", meuble._id)
+//     console.log(arrayMeuble)  
+//     localStorage.setItem("ligne-panier_"+meuble._id+"-"+select.value, arrayMeuble)
+//     spanError.innerHTML = "Article ajouté au panier "
+//     btnValid.setAttribute("disabled", true)
+
+//     }else if(["ligne-panier_"+meuble._id+"-"+select.value] in localStorage){
+//         //e.preventDefault()
+//         alert("coucou")
+//         spanError.innerHTML = "article déja ajouté au panier"
+//     }else {
+//         //e.preventDefault()
+//         spanError.innerHTML = "Aucune quantité commandé"
+//         console.log("aucune quantité commandé")
+//     }   
+// })
