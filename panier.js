@@ -16,15 +16,18 @@ let products_id = []// recuperation des id
 //création d'un tableau "productsTotal" avec ajout de tableau "product" avec données pour chaque meuble
 
 for (let i=0; i<localStorage.length; i++){
-    let stringProduct = localStorage.getItem(localStorage.key([i]))
+    let stringProduct = localStorage.getItem(localStorage.key([i])) //recup la chaine de caracteres de chaque localStorage
     //console.log(stringProduct)
     let product = stringProduct.split(",");// [name, vernis, qté, prixTT, id]
     //console.log(product)
     productsTotal.push(product)
+/**
+ * TEST 
+ * verif que product et productsTotal sont des tableaux
+ */
+console.log(Array.isArray(product), Array.isArray(productsTotal))
 }
-
 if(prixTotal = 0){
-    //tFoot.innerHTML = "Votre panier est vide"
     panierVide();
 }
 for (let i = 0; i < productsTotal.length; i++){
@@ -77,7 +80,7 @@ for(let i=0; i<productsTotal.length; i++){
  *  
 */
 // regex commence par a-z ou en maj, puis que des lettres et avec accents, plus que 2 lettres puis ajout hypothetique du prenom composé
-let regexText = /^[a-zA-Zéèîï][a-zéèêçîï]+([-'\s][a-zA-Zéèîï][a-zéèêçîï]+)?/; 
+let regexText = /^[a-zA-Zéèîï][a-zA-Zéèêçîï]+([-'\s][a-zA-Zéèîï][a-zA-Zéèêçîï]+)?/; 
 let regexMail = /.+@.+\..+/
 let contact
 let form = document.getElementById("form")
@@ -88,7 +91,7 @@ let champAddress = inputs.querySelector("#address")
 
 /**
  * fonction pour valider le champ
- * @param {sting} champ 
+ * @param {string} champ 
  */
 let styleInputValid =(champ)=>{ 
     champ.nextElementSibling.innerHTML = "&#10004"
@@ -161,73 +164,6 @@ champAddress.addEventListener("blur", function(e){
     }    
 })
  
-/**
- * création d'un nouvel objet FormData qui recupere les names du formulaire et leurs valeurs
- */
-//contact = new FormData(form)
-
-
-
-
-//let object = {};
-/*
-//test fonction convertion formData
-const convertionFormData =()=>{
-    contact.forEach(function(value, key){
-    object[key] = value;  
-});   
-*/
-/*
-contact.forEach(function(value, key){
-    object[key] = value;
-});        
-*/
-/**
-* variable a envoyer en POST avec object{} qui contient le FormData et products[] qui contient les id du panier 
-*/
-//let json = JSON.stringify({"contact":object, "products": products_id});
-
-/**
- * variable avec la reponse du serveur
- */
-//let responseSubmit
-/**
- * fonction asynchrone pour envoyer avec POST json avec contact et products
- * 
- */
-/*
-const postForm = async function(){
-    try{
-        let response = await fetch("http://localhost:3000/api/furniture/order", {
-            method:'POST',
-            headers:{
-                "X-Requested-With":"XMLHttpRequest",
-                'Content-type': 'application/json'
-            },
-            body: json
-        })
-        responseSubmit = await response.json()
-        if(response.ok === false){//si le status n'est pas entre 200 et 299
-            console.error(responseSubmit + response.status)
-        }else {
-            
-            console.log( "envoi correct")
-            console.log(responseSubmit)
-
-        } 
-    }catch(e){
-        console.log("probleme avec postForm  "+e)
-    }   
-}
-*/
-// let json = async()=>{
-//     let contact = new FormData(form)
-//     let object = {}
-//     contact.forEach(function(value, key){
-//         object[key] = value;
-//     }); 
-//     return JSON.stringify({"contact":object, "products": products_id});
-// }
 let responseSubmit;
 let json
 /**
@@ -247,9 +183,15 @@ const postForm = async function(){
         if(response.ok === false){//si le status n'est pas entre 200 et 299
             console.error(responseSubmit + response.status)
         }else {
-            console.log(json)
+/**
+ * TEST verif qu'on envoi bien une chaine de caractere (json) et que la reponse est bien un objet 
+ * 
+ */            
+            console.log(typeof(json) == "string")
             console.log( "envoi correct")
-            console.log(responseSubmit)
+            console.log(responseSubmit instanceof Object)
+            
+
 
         } 
     }catch(e){
@@ -270,7 +212,14 @@ form.addEventListener("submit", async function(e){
             break    
         }
     }
-    if (valide == true){
+    if (valide == true && table.children.length > 2 ){
+/**
+ * TEST verif valid == true && panier non vide
+ */
+console.log(valide == true)
+console.log(table.children.length >2)
+
+
         e.preventDefault() 
 /**
  * création d'un nouvel objet FormData qui recupere les names du formulaire et leurs valeurs
@@ -288,11 +237,7 @@ form.addEventListener("submit", async function(e){
 */        
         json = JSON.stringify({"contact":object, "products": products_id});
         await postForm()
-        
-        console.log(json)
-        console.log(responseSubmit)
-        //console.log(responseSubmit.contact)
-        
+               
 /**
 *  Recuparation en localStorage du firstName, lastName, prixTotal et orderId
 * */    
@@ -303,13 +248,18 @@ form.addEventListener("submit", async function(e){
         localStorage.setItem("commande-id",responseSubmit.orderId)
         
         window.open("merci.html", '_self')
-        
-    
-        
-        
+         
         console.log("formulaire validé et envoyé")
     }else{
-        console.error("Le formulaire est mal remplis")
-        } 
+        e.preventDefault()
+        if(valide != true){
+            console.error("Le formulaire est mal remplis")
+            alert("Le formulaire est mal remplis")
+        }
+        else if (table.children.length == 2){
+            console.error(" votre panier est vide")
+            alert("votre panier est vide")
+        }
+    }     
 })
 
