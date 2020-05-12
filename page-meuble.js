@@ -54,33 +54,7 @@ const choixVernis=(meuble)=>{
         select.appendChild(option)
     }
 } 
-/**
- * 
- * @param {Number} totalArticles 
- * fonction pour ajouter la quantité à totalArticles
- * avec verif pour ce cas precis que totalArticles <=1
- */
-let ajoutMeuble=(totalArticles)=>{
-    
-    nbrArticles.innerHTML = totalArticles
-    spanError.innerHTML = " "
-    btnAjout.disabled = true
-    btnSupp.disabled = false 
-    return totalArticles      
-}    
-/**
- * 
- * @param {Number} totalArticles
- * fonction pour enlever à totalArticles
- * avec verif totalArticles >0
- */
-let suppMeuble=(totalArticles)=>{
-        nbrArticles.innerHTML = totalArticles--
-        btnAjout.disabled = true
-        btnSupp.disabled = false 
-        return totalArticles 
-    }
-    
+ 
 /**
  * Fonction asynchrone fetch pour GET page du meuble avec son id
  */
@@ -130,7 +104,7 @@ console.log(Array.isArray(meuble.varnish))
  */
 
             btnValid.addEventListener("click", function(e){
-                if (totalArticles!=0){
+                if (totalArticles!=0 && totalArticles<2){
                 arrayMeuble.push(meuble.name, select.value, totalArticles, meuble.price*parseInt(totalArticles) +" €", meuble._id)
                 //console.log(arrayMeuble)  
             

@@ -37,17 +37,15 @@ for (let i = 0; i < productsTotal.length; i++){
 
     prixTotal += parseInt(productsTotal[i][3],10)
     tFoot.innerHTML = `Prix total: ${prixTotal}  €`    
-    //console.log(tFoot.innerHTML)
     
     
 // ajout du bouton pour supp la ligne   
     btnSupp.addEventListener("click", function(e){
         prixTotal -= parseInt(productsTotal[i][3],10)
         if(prixTotal <= 0){
-            //tFoot.innerHTML = "Votre panier est vide"
             panierVide()
         }else{
-            tFoot.innerHTML = `${prixTotal}  €`
+            tFoot.innerHTML = `Prix total: ${prixTotal}  €`
         }
         //console.log(prixTotal)
         localStorage.removeItem(localStorage.key([i]))
@@ -76,16 +74,16 @@ for(let i=0; i<productsTotal.length; i++){
 
 /**
  * 
- * validation inputs du formulaire
+ * validation inputs du formulaire [^0-9]
  *  
 */
 // regex commence par a-z ou en maj, puis que des lettres et avec accents, plus que 2 lettres puis ajout hypothetique du prenom composé
-let regexText = /^[a-zA-Zéèîï][a-zA-Zéèêçîï]+([-'\s][a-zA-Zéèîï][a-zA-Zéèêçîï]+)?/; 
+let regexText = /^[a-zA-Zéèçîï][a-zA-Zéèêçîï]+([a-zA-Zéèêçîï\-'\s]+)$/; 
 let regexMail = /.+@.+\..+/
 let contact
 let form = document.getElementById("form")
 let inputs = document.forms["form"]
-let champsText = inputs.querySelectorAll("[type=text]")
+let champsText = document.querySelectorAll(".only-letters")
 let champMail = inputs.querySelector("[type=email]")
 let champAddress = inputs.querySelector("#address")
 
@@ -121,20 +119,18 @@ let erreurConformite = (champ)=>{
 }
 
 //traitement pour validation inputs avec du text
-let onlyLetters = document.querySelectorAll(".only-letters")
-
-for (let i=0; i< onlyLetters.length; i++){
-    onlyLetters[i].addEventListener("blur", function(e){
+for (let i=0; i< champsText.length; i++){
+    champsText[i].addEventListener("blur", function(e){
     
-        if(!onlyLetters[i].value){
+        if(!champsText[i].value){
             e.preventDefault()
-            erreurVide(onlyLetters[i])
-        }else if(!regexText.test(onlyLetters[i].value)) {
+            erreurVide(champsText[i])
+        }else if(!regexText.test(champsText[i].value)) {
             e.preventDefault()
-            erreurConformite(onlyLetters[i])
+            erreurConformite(champsText[i])
 
         }else{
-            styleInputValid(onlyLetters[i])
+            styleInputValid(champsText[i])
         }
     })
 }

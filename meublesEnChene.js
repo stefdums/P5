@@ -7,7 +7,6 @@ const getFurnitures = async function(){
         let response = await fetch("http://localhost:3000/api/furniture")//renvoi une promesse
         if(response.ok){//status = 200->299
             let results = await response.json()//renvoi une promesse (converti en json)
-
 /**
  *  TEST retour d'un tableau d'objet
  */            
@@ -22,8 +21,7 @@ const getFurnitures = async function(){
                 let lien = document.createElement("a");
                 lien.id = results[i].name;
                 let adressLien = "produit.html";
-                lien.setAttribute("href", "produit.html?id=" +idMeuble)
-                //lien.setAttribute("target", "_blank") 
+                lien.setAttribute("href", "produit.html?id=" +idMeuble) 
                 lien.textContent = nomDuMeuble
             //création d'un li pour chaque article
                 let li = document.createElement("li");
